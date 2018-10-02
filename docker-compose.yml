@@ -8,7 +8,7 @@ services:
       cache_from:
         - stevenxie/junior:latest
         - busybox:1.29
-        - stevenxie/junior:build
+        - stevenxie/junior:builder
         - golang:1.10-alpine
     container_name: junior
     ports:

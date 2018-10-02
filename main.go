@@ -45,7 +45,7 @@ func run(ctx *cli.Context) error {
 	}
 
 	server := makeServer(cfg.HandleFastHTTP)
-	fmt.Printf("Listening on port %s...", cfg.Port)
+	fmt.Printf("Listening on port %s...\n", cfg.Port)
 	server.ListenAndServe(":" + cfg.Port)
 	return nil
 }
