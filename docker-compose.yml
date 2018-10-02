@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  junior:
+    image: stevenxie/junior:latest
+    build:
+      context: .
+      cache_from:
+        - stevenxie/junior:latest
+        - golang:1.10-alpine
+        - alpine:3.8
+    container_name: junior
+    ports:
+      - "3000:80"

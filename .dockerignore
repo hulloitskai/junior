@@ -1,0 +1,17 @@
+## Git:
+.git/
+.gitignore
+README.md
+
+## Docker:
+.dockerignore
+docker-compose.yml
+
+## Miscellaneous:
+.editorconfig
+vendor/
+
+## Produced binaries:
+/junior*
+!/junior.*
+/junior.exe
