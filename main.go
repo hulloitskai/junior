@@ -14,8 +14,8 @@ func init() {
 }
 
 const (
-	// Version describes the version of command junior.
-	Version = "0.1.0"
+	// Version describes the current version of junior.
+	Version = "1.0.0"
 	// Name is the name of this server.
 	Name = "junior"
 )

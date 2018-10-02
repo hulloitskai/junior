@@ -12,7 +12,7 @@ COPY . .
 ENV GO111MODULE=on CGO_ENABLED=0
 
 ## Install build + external dependencies:
-RUN apk add --no-cache make git upx
+RUN apk add make git upx
 RUN go version && make get
 
 ## Create production binary.
@@ -50,8 +50,8 @@ ENV PORT=80 ROOT_DIR=/www/ TRAILING_SLASH=off NOT_FOUND="404.html"
 COPY scripts/healthcheck.sh .
 ENV ENDPOINT=http://0.0.0.0:80
 HEALTHCHECK --interval=30s --timeout=30s --start-period=15s --retries=1 \
-  CMD ["sh", "healthcheck.sh"]
+  CMD ["sh", "/app/healthcheck.sh"]
 
 ## Expose default port, set entrypoint.
 EXPOSE $PORT
-CMD ["/app/junior"]
+ENTRYPOINT ["/app/junior"]
