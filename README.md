@@ -1,6 +1,6 @@
 # junior
 
-_A fast, tiny HTTP server for serving static content._
+_A fast, minimalist HTTP server for serving static content._
 
 [![Travis CI: build status][travis-img]][travis]
 [![Go Report Card][grc-img]][grc]
@@ -32,7 +32,7 @@ Download executable from
 ## Implementation
 
 `junior` uses [`valyala/fasthttp`](https://github.com/valyala/fasthttp) behind
-the scenes to give itself that extra edge, and is boostrapped with
+the scenes to give itself that extra edge, and is bootstrapped with
 [`urfave/cli`](https://github.com/urfave/cli).
 
 The Docker image [`stevenxie/junior`][docker] features a version of `junior`

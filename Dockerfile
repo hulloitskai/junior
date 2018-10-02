@@ -31,7 +31,7 @@ FROM busybox:1.29 as production
 LABEL maintainer="Steven Xie <hello@stevenxie.me>"
 LABEL org.label-schema.schema-version="1.0"
 LABEL org.label-schema.name = "junior"
-LABEL org.label-schema.description="A fast, tiny HTTP server for serving \
+LABEL org.label-schema.description="A fast, minimalist HTTP server for serving \
   static content."
 LABEL org.label-schema.vcs-url="https://github.com/steven-xie/junior"
 LABEL org.label-schema.vendor="Steven Xie <hello@stevenxie.me>"

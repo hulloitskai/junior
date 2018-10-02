@@ -1,2 +1,2 @@
-// Program junior is a fast, tiny HTTP server for serving static content.
+// Program junior is a fast, minimalist HTTP server for serving static content.
 package main
