@@ -27,6 +27,7 @@ func main() {
 	app.Usage = "a fast, tiny HTTP server for serving static content"
 	app.UsageText = fmt.Sprintf("%s [global options]", Name)
 	app.Action = run
+	RegisterFlags(app)
 
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
@@ -38,12 +39,10 @@ func makeServer(handler fhttp.RequestHandler) *fhttp.Server {
 }
 
 func run(ctx *cli.Context) error {
-	cfg, err := ReadConfig()
-	if err != nil {
-		return err
-	}
-
+	cfg := ReadConfig(ctx)
 	server := makeServer(cfg.HandleFastHTTP)
+
+	fmt.Printf("Listening on port %s...", cfg.Port)
 	server.ListenAndServe(":" + cfg.Port)
 	return nil
 }

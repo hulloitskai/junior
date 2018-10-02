@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/caarlos0/env"
+	"gopkg.in/urfave/cli.v1"
 )
 
 // Config is a set of options for junior.
@@ -28,25 +28,18 @@ type Config struct {
 	// If it does not exist, a default 404 page will be served.
 	NotFound string `env:"NOT_FOUND" envDefault:"404.html"`
 
-	Port    string `env:"PORT" envDefault:"80"`
+	Port    string `env:"PORT"`
 	RootDir string `env:"ROOT_DIR,required"`
 }
 
-// ReadConfig reads a Config from the system environment.
-func ReadConfig() (*Config, error) {
-	var (
-		cfg = new(Config)
-		err = env.Parse(cfg)
-	)
-
-	if err != nil {
-		return nil, fmt.Errorf("junior: failed to read Config: %v", err)
+// ReadConfig reads a Config from a cli.Context.
+func ReadConfig(ctx *cli.Context) *Config {
+	return &Config{
+		Port:          ctx.String("port"),
+		TrailingSlash: ctx.String("trailing-slash"),
+		RootDir:       ctx.String("root-dir"),
+		NotFound:      ctx.String("not-found"),
 	}
-	if err = cfg.Validate(); err != nil {
-		return nil, fmt.Errorf("junior: invalid config: %v", err)
-	}
-
-	return cfg, nil
 }
 
 // DefaultFile is the default file of a directory that will be returned if

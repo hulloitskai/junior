@@ -8,7 +8,7 @@ _A fast, tiny HTTP server for serving static content._
 
 ## Usage
 
-### Docker _(recommended)_
+### Docker
 
 ```bash
 ## Run server listening on port 3000, serving locally from "./local/www".
@@ -21,7 +21,11 @@ Download executable from
 [releases](https://github.com/steven-xie/junior/releases), then run:
 
 ```bash
-./junior # run HTTP server, configured via environment variables
+## Run HTTP server on port 4200, serving from "/var/www".
+./junior -p 4200 --root "/var/www"
+
+## For more details:
+./junior --help
 ```
 
 [grc]: https://goreportcard.com/report/github.com/steven-xie/junior
