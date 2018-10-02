@@ -23,13 +23,13 @@ func (cfg *Config) HandleFastHTTP(ctx *fhttp.RequestCtx) {
 		case "true", "1":
 			if len(lseg) > 0 && bytes.IndexRune(lseg, '.') == -1 {
 				path = append(path, '/')
-				ctx.RedirectBytes(path, 301) // redirect with trailing slash
+				RedirectRel(ctx, path) // redirect with trailing slash
 				return
 			}
 		case "false", "0":
 			if len(lseg) == 0 { // path ends in a '/'
-				path = path[:len(path)-1]    // pop last element
-				ctx.RedirectBytes(path, 301) // redirect without trailing slash
+				path = path[:len(path)-1] // pop last element
+				RedirectRel(ctx, path)    // redirect without trailing slash
 				return
 			}
 		}
@@ -68,4 +68,34 @@ func (cfg *Config) HandleFastHTTP(ctx *fhttp.RequestCtx) {
 	}
 
 	ctx.SendFile(fpath)
+}
+
+const strProto = "proto="
+
+// RedirectRel performs a relative redirect, taking the X-Forwarded-Proto
+// and Forwarded headers into account.
+func RedirectRel(ctx *fhttp.RequestCtx, path []byte) {
+	header := ctx.Request.Header.Peek("Forwarded")
+	if index := bytes.Index(header, []byte(strProto)); index != -1 {
+		header = header[index+len(strProto):]
+
+		if index = bytes.IndexRune(header, ';'); index != -1 {
+			header = header[:index]
+		}
+	}
+	if len(header) == 0 {
+		header = ctx.Request.Header.Peek("X-Forwarded-Proto")
+	}
+
+	var proto []byte
+	if len(header) > 0 {
+		header = bytes.TrimSpace(header)
+		proto = append(header, "://"...)
+	} else {
+		proto = append(ctx.URI().Scheme(), "://"...)
+	}
+
+	uri := append(proto, ctx.URI().Host()...)
+	ctx.Response.Header.SetCanonical([]byte("Location"), append(uri, path...))
+	ctx.SetStatusCode(fhttp.StatusMovedPermanently)
 }

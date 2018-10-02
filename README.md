@@ -59,7 +59,7 @@ So, I set out to build a custom solution, and this is the result of that:
 [travis-img]: https://travis-ci.com/steven-xie/junior.svg?branch=master
 [grc]: https://goreportcard.com/report/github.com/steven-xie/junior
 [grc-img]: https://goreportcard.com/badge/github.com/steven-xie/junior
-[mb]: https://microbadger.com/images/stevenxie/juniora
+[mb]: https://microbadger.com/images/stevenxie/junior
 [mb-img]: https://images.microbadger.com/badges/image/stevenxie/junior.svg
 [docker]: https://hub.docker.com/r/stevenxie/junior
 [docker-img]: https://img.shields.io/docker/pulls/stevenxie/junior.svg
