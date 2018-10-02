@@ -2,6 +2,7 @@
 
 _A fast, tiny HTTP server for serving static content._
 
+[![Travis CI: build status][travis-img]][travis]
 [![Go Report Card][grc-img]][grc]
 [![Docker Hub][docker-img]][docker]
 [![MicroBadger][mb-img]][mb]
@@ -28,6 +29,8 @@ Download executable from
 ./junior --help
 ```
 
+[travis]: https://travis-ci.com/steven-xie/junior
+[travis-img]: https://travis-ci.com/steven-xie/junior.svg?branch=master
 [grc]: https://goreportcard.com/report/github.com/steven-xie/junior
 [grc-img]: https://goreportcard.com/badge/github.com/steven-xie/junior
 [mb]: https://microbadger.com/images/stevenxie/juniora

@@ -36,7 +36,7 @@ install:
 
 script:
   ## Bring image online.
-  - docker-compose up -d && sleep 15
+  - docker-compose up -d && sleep 5
   - |
     ## Set environment variables for healthcheck.
     export ENDPOINT=http://localhost:3000
@@ -53,6 +53,6 @@ deploy:
 
 after_deploy:
     ## Build "builder" stage.
-  - docker build --target=builder -t ${DOCKER_USER}/${REPO_NAME} .
+  - docker build --target=builder -t ${DOCKER_USER}/${REPO_NAME}:builder .
     ## Push "builder" stage.
   - docker push ${DOCKER_USER}/${REPO_NAME}:builder

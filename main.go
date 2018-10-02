@@ -39,9 +39,12 @@ func makeServer(handler fhttp.RequestHandler) *fhttp.Server {
 }
 
 func run(ctx *cli.Context) error {
-	cfg := ReadConfig(ctx)
-	server := makeServer(cfg.HandleFastHTTP)
+	cfg, err := ReadConfig(ctx)
+	if err != nil {
+		return err
+	}
 
+	server := makeServer(cfg.HandleFastHTTP)
 	fmt.Printf("Listening on port %s...", cfg.Port)
 	server.ListenAndServe(":" + cfg.Port)
 	return nil

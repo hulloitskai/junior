@@ -33,13 +33,18 @@ type Config struct {
 }
 
 // ReadConfig reads a Config from a cli.Context.
-func ReadConfig(ctx *cli.Context) *Config {
-	return &Config{
+func ReadConfig(ctx *cli.Context) (*Config, error) {
+	cfg := &Config{
 		Port:          ctx.String("port"),
-		TrailingSlash: ctx.String("trailing-slash"),
-		RootDir:       ctx.String("root-dir"),
+		RootDir:       ctx.String("root"),
 		NotFound:      ctx.String("not-found"),
+		TrailingSlash: ctx.String("trailing-slash"),
 	}
+
+	if err := cfg.Validate(); err != nil {
+		return nil, fmt.Errorf("junior: invalid config: %v", err)
+	}
+	return cfg, nil
 }
 
 // DefaultFile is the default file of a directory that will be returned if

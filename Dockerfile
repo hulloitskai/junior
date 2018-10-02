@@ -2,7 +2,7 @@
 ## BUILD STAGE
 ##################################################
 
-FROM golang:alpine AS build
+FROM golang:alpine AS builder
 
 ## Copy source files.
 WORKDIR /build
@@ -38,7 +38,7 @@ LABEL org.label-schema.vendor="Steven Xie <hello@stevenxie.me>"
 
 ## Copy production artifacts to /etc/junior.
 WORKDIR /app
-COPY --from=build /build/junior .
+COPY --from=builder /build/junior .
 
 ## Copy default www/ files.
 COPY ./www/ /www/
