@@ -1,0 +1,58 @@
+services: docker
+
+git:
+  depth: 3
+
+cache:
+  directories:
+    - /opt/bin
+
+env:
+  global:
+    - REPO_NAME=junior
+    - RELEASE_BRANCH=master
+    - DOCKER_COMPOSE_VERSION=1.22.0
+    - DOCKER_USER=stevenxie
+    - PATH=/opt/bin:$PATH
+    - secure: "qx/ELNbhUwMuexHrLm3F3hE8/chrjTakb2uDeF7AXkOF8rlznZpkfKkE7yrN8Y7TwqN1ZamlhYyFknI2CudFNN7lS3TWjs08LCJr+pZq/AScNQ4Rd/3vFLwqtqP5NJg2MTYmJjFKtY3fZj7qUR2xbBy/4GAbnfeLeJfBf0TjQDtnVgcVYhd8gQVy/c4DUzAGVaYeLaTHy4E8sM8+YM4DrYk4sX7gobA1/aOLHgDGncElaJZxg/n8ZNuYQcmGa44jTdKl3MZUiEJZDS4CN0TYFtl8e9IgLN8vIre1r/Exhs3j85ssJkAmwRqV7aoedcNB1d38Tk3gltSJZoAP0lkdV8h8bTqp/8xrTOvvb6zQc144sVOwXSQdQRwVBYVxEyUxzOQoC3j7cp7bDYR4pNM0R1x0Limg0StxQYZfB69bqucbMZP28gYAaVrU1oQ35AQrZXuFA/vgujLe16T1tsvJ9qs9uzG2oYzgXiCvblfh6P4FrP+gGeWi05ATIETqJHsm6xKsBBvQz9LkuvL71fdnF2kAaUDUCAiU71TSlooRulrZtnqi72D+/LdHMHlMfqvb9BEV4s3/M0uZulO7Gh5N0pOo2PiwC2dGSAApcnYxvat3GkjMxu6B7b8WhOXMtUSYeHDO4HU+3aK3y1jWbXNZiVhAkLnox3eplgJoOP8Az/c="
+
+before_install:
+  - echo "/opt/bin:" && ls -l /opt/bin
+  - |
+    if [ ! -x /opt/bin/docker-compose ]; then
+      echo "Installing docker-compose:"
+      curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+      chmod +x docker-compose
+      mv docker-compose /opt/bin/
+
+      echo "/opt/bin:" && ls -l /opt/bin
+    fi
+  - docker-compose version
+
+install:
+  - docker pull $DOCKER_USER/$REPO_NAME:latest
+  - docker pull $DOCKER_USER/$REPO_NAME:builder
+  - docker-compose build
+
+script:
+  ## Bring image online.
+  - docker-compose up -d && sleep 15
+  - |
+    ## Set environment variables for healthcheck.
+    export ENTRYPOINT=http://localhost:3000
+
+    ## Return success only if both healthcheck and image unload was successful.
+    if ! (./scripts/healthcheck.sh && docker-compose down); then exit -1; fi
+
+deploy:
+  provider: script
+  script: ./scripts/deploy.sh
+  skip-cleanup: true
+  on:
+    all_branches: true
+
+after_deploy:
+    ## Build "builder" stage.
+  - docker build --target=builder -t ${DOCKER_USER}/${REPO_NAME} .
+    ## Push "builder" stage.
+  - docker push ${DOCKER_USER}/${REPO_NAME}:builder
